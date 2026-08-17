@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OC — Studio de création. Cinéma, écriture, image.</title>
+<meta name="description" content="OC est une jeune structure de création basée dans les Hauts-de-France. Découvrez Mission Renaissance (cinéma), un roman de science-fiction en cours d'écriture, et un projet graphique à venir.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07070a; --bg-1:#0c0d10; --line:#232428; --line-soft:#1a1b1e;
+  --ink:#eef0f2; --ink-dim:#a8abb0; --ink-faint:#686b70;
+  --silver:#cdd0d4; --silver-2:#9fa3a8;
+  --cine:#6fa3c4; --cine-dim:#3f5c6e;
+  --livre:#c9a15a; --livre-dim:#6e5834;
+  --comic:#c0453a; --comic-dim:#6e2e28;
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'Inter',-apple-system,sans-serif;
+  --mono:'IBM Plex Mono',monospace;
+  --hand:'Caveat',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:300;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;background:none;border:none;color:inherit;cursor:pointer;}
+img{max-width:100%;display:block;}
+.wrap{max-width:1100px;margin:0 auto;padding:0 clamp(20px,5vw,60px);}
+@media (prefers-reduced-motion: reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important;}}
+::selection{background:var(--cine-dim);color:#fff;}
+:focus-visible{outline:1px solid var(--cine);outline-offset:3px;}
+ 
+.grain{position:fixed;inset:0;pointer-events:none;z-index:998;opacity:.035;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+ 
+/* ===== NAV ===== */
+.topnav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content:space-between;align-items:center;padding:24px clamp(20px,5vw,50px);pointer-events:none;}
+.topnav *{pointer-events:auto;}
+.brand{font-family:var(--serif);font-weight:700;font-size:19px;letter-spacing:.16em;color:var(--silver);}
+.nav-links{display:flex;gap:30px;}
+.nav-links a{font-size:12.5px;letter-spacing:.06em;color:var(--ink-dim);transition:color .25s;}
+.nav-links a:hover{color:var(--ink);}
+.burger{display:none;flex-direction:column;gap:5px;padding:6px;}
+.burger span{width:20px;height:1px;background:var(--silver);}
+.mobile-menu{position:fixed;inset:0;background:#08090b;z-index:350;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;transform:translateY(-100%);transition:transform .5s cubic-bezier(.7,0,.2,1);}
+.mobile-menu.open{transform:translateY(0);}
+.mobile-menu a{font-family:var(--serif);font-size:24px;color:var(--ink-dim);}
+@media(max-width:760px){.nav-links{display:none;}.burger{display:flex;}}
+ 
+/* ===== VIEW SYSTEM ===== */
+.view{display:none;min-height:100svh;}
+.view.active{display:block;animation:viewFade .5s ease;}
+@keyframes viewFade{from{opacity:0;}to{opacity:1;}}
+.back-link{position:fixed;top:26px;left:clamp(20px,5vw,50px);z-index:250;display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-dim);opacity:0;pointer-events:none;transition:opacity .3s, color .3s;}
+.view.active .back-link{opacity:1;pointer-events:auto;}
+.back-link:hover{color:var(--ink);}
+.back-link svg{width:14px;height:14px;}
+ 
+/* ================= HOME ================= */
+#view-home{
+  min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;
+  background:radial-gradient(ellipse 80% 60% at 50% 20%,rgba(255,255,255,.03),transparent 60%), linear-gradient(180deg,#07070a,#08090c);
+  position:relative;text-align:center;padding:120px 20px 60px;
+}
+.home-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.32em;color:var(--ink-faint);text-transform:uppercase;margin-bottom:18px;opacity:0;animation:fadeUp .9s ease .1s forwards;}
+.home-title{font-family:var(--serif);font-weight:700;font-size:clamp(46px,9vw,96px);letter-spacing:.02em;line-height:1;opacity:0;animation:fadeUp .9s ease .25s forwards;}
+.home-sub{font-family:var(--serif);font-style:italic;font-weight:500;color:var(--silver-2);font-size:clamp(15px,2vw,19px);margin-top:16px;max-width:460px;opacity:0;animation:fadeUp .9s ease .4s forwards;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+ 
+.objects-stage{display:flex;justify-content:center;align-items:flex-end;gap:clamp(30px,7vw,90px);margin-top:clamp(50px,8vw,90px);flex-wrap:wrap;opacity:0;animation:fadeUp 1s ease .6s forwards;}
+.object-cell{display:flex;flex-direction:column;align-items:center;gap:20px;cursor:pointer;width:190px;}
+.object-plinth{position:relative;width:150px;height:150px;display:flex;align-items:center;justify-content:center;}
+.object-glow{position:absolute;inset:-30px;border-radius:50%;background:radial-gradient(circle,var(--glow) 0%,transparent 70%);opacity:0;transition:opacity .5s ease;filter:blur(4px);}
+.object-cell:hover .object-glow,.object-cell:focus-visible .object-glow{opacity:.35;}
+.object-icon{position:relative;z-index:2;color:var(--silver-2);transition:color .4s ease,transform .5s cubic-bezier(.2,.8,.3,1);}
+.object-cell:hover .object-icon,.object-cell:focus-visible .object-icon{color:var(--obj-color);transform:translateY(-8px) scale(1.04);}
+.object-icon svg{width:100%;height:100%;}
+.object-cell:nth-child(1) .object-icon{width:110px;height:80px;}
+.object-cell:nth-child(2) .object-icon{width:88px;height:108px;}
+.object-cell:nth-child(3) .object-icon{width:98px;height:108px;}
+.object-label{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);transition:color .3s;}
+.object-cell:hover .object-label{color:var(--obj-color);}
+.object-title{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink);}
+.object-tag{font-size:12px;color:var(--ink-dim);}
+.cell-cine{--obj-color:var(--cine);--glow:var(--cine);}
+.cell-livre{--obj-color:var(--livre);--glow:var(--livre);}
+.cell-comic{--obj-color:var(--comic);--glow:var(--comic);}
+.object-cell:active .object-icon{transform:scale(.96);}
+ 
+.home-foot-note{margin-top:70px;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--ink-faint);text-transform:uppercase;opacity:0;animation:fadeUp 1s ease .9s forwards;}
+ 
+/* ================= SHARED CELL LAYOUT ================= */
+.cell{min-height:100svh;padding:130px 0 100px;position:relative;}
+.cell-hero{text-align:left;margin-bottom:60px;}
+.cell-badge{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;padding:7px 14px;border-radius:20px;margin-bottom:22px;}
+.cell-badge .dot{width:6px;height:6px;border-radius:50%;}
+.cell-title{font-family:var(--serif);font-weight:700;font-size:clamp(38px,6vw,64px);line-height:1.02;margin-bottom:16px;}
+.cell-lede{color:var(--ink-dim);font-size:15.5px;max-width:600px;}
+.cell-meta{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-faint);margin-top:22px;}
+.cell-block{margin-bottom:56px;}
+.cell-block h3{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:16px;}
+.cell-block p{color:var(--ink-dim);font-size:15px;max-width:680px;margin-bottom:12px;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:50px;}
+@media(max-width:820px){.two-col{grid-template-columns:1fr;gap:30px;}}
+ 
+/* ================= CAMERA CELL — MISSION RENAISSANCE ================= */
+#view-camera{background:linear-gradient(180deg,#08090c,#0a0b0e);}
+#view-camera .cell-badge{background:rgba(111,163,196,.08);border:1px solid var(--cine-dim);color:var(--cine);}
+#view-camera .cell-badge .dot{background:var(--cine);box-shadow:0 0 8px var(--cine);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+#view-camera h3{color:var(--cine);}
+.mr-synopsis{font-family:var(--serif);font-style:italic;color:var(--silver);font-size:19px;line-height:1.6;max-width:680px;}
+.progress-wrap{max-width:420px;margin-top:6px;}
+.progress-label{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:var(--ink-faint);text-transform:uppercase;margin-bottom:8px;}
+.progress-bar{height:3px;background:var(--line);overflow:hidden;}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--cine-dim),var(--cine));transition:width 1.4s cubic-bezier(.5,0,.2,1);}
+.progress-fill.go{width:42%;}
+.schema-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.schema-card{border:1px solid var(--line);}
+.schema-frame{aspect-ratio:4/3;background:repeating-linear-gradient(120deg,#0f1013,#0f1013 2px,#0b0c0e 2px,#0b0c0e 24px);position:relative;display:flex;align-items:center;justify-content:center;}
+.schema-frame::before,.schema-frame::after{content:'';position:absolute;width:14px;height:14px;border:1px solid var(--cine-dim);}
+.schema-frame::before{top:8px;left:8px;border-right:none;border-bottom:none;}
+.schema-frame::after{bottom:8px;right:8px;border-left:none;border-top:none;}
+.schema-frame span{font-family:var(--mono);font-size:9px;color:var(--ink-faint);letter-spacing:.1em;}
+.schema-cap{padding:14px 16px;}
+.schema-cap h5{font-family:var(--serif);font-size:15px;margin-bottom:3px;}
+.schema-cap span{font-family:var(--mono);font-size:10px;color:var(--ink-faint);}
+@media(max-width:780px){.schema-grid{grid-template-columns:1fr;}}
+.support-box{border:1px solid var(--cine-dim);background:rgba(111,163,196,.05);padding:34px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px;}
+.support-box h4{font-family:var(--serif);font-size:21px;margin-bottom:8px;}
+.support-box p{color:var(--ink-dim);font-size:13.5px;max-width:420px;}
+.btn{padding:13px 28px;font-size:12.5px;letter-spacing:.06em;border-radius:2px;display:inline-block;transition:all .3s ease;border:1px solid transparent;white-space:nowrap;}
+.btn-cine{background:var(--cine);color:#07090b;font-weight:500;}
+.btn-cine:hover{background:#8dbdd9;transform:translateY(-2px);}
+.btn-ghost{border-color:var(--line);color:var(--ink);}
+.btn-ghost:hover{border-color:var(--silver-2);background:rgba(255,255,255,.03);}
+ 
+/* ================= LIVRE CELL ================= */
+#view-livre{background:linear-gradient(180deg,#0b0a08,#0a0908);}
+#view-livre .cell-badge{background:rgba(201,161,90,.08);border:1px solid var(--livre-dim);color:var(--livre);}
+#view-livre .cell-badge .dot{background:var(--livre);}
+#view-livre h3{color:var(--livre);}
+.book-spread{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);position:relative;}
+.book-spread::before{content:'';position:absolute;top:0;bottom:0;left:50%;width:1px;background:linear-gradient(180deg,transparent,var(--line),transparent);}
+.book-page{padding:46px 40px;}
+.book-page h4{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--livre);margin-bottom:16px;}
+.book-page p{color:var(--ink-dim);font-size:14.5px;margin-bottom:14px;}
+.book-page .placeholder-txt{color:var(--ink-faint);font-style:italic;font-size:13.5px;}
+.book-page .hand-note{font-family:var(--hand);font-size:22px;color:var(--livre);opacity:.85;margin-top:6px;}
+@media(max-width:780px){.book-spread{grid-template-columns:1fr;}.book-spread::before{display:none;}}
+.stage-tracker{display:flex;gap:0;margin-top:10px;border-top:1px solid var(--line);}
+.stage{flex:1;padding:16px 10px 0;text-align:center;border-top:2px solid var(--line);margin-top:-2px;}
+.stage.done{border-top-color:var(--livre);}
+.stage span{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);}
+.stage.done span{color:var(--livre);}
+ 
+/* ================= COMIC CELL ================= */
+#view-comic{background:#0a0908;}
+#view-comic .cell-badge{background:rgba(192,69,58,.08);border:1px solid var(--comic-dim);color:var(--comic);}
+#view-comic .cell-badge .dot{background:var(--comic);}
+#view-comic h3{color:var(--comic);}
+.comic-showcase{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.comic-panel{
+  border:2px solid var(--silver-2);min-height:190px;position:relative;padding:16px;
+  background:radial-gradient(circle,rgba(255,255,255,.05) 1px,transparent 1.3px) 0 0/9px 9px,#0d0e11;
+  display:flex;align-items:center;justify-content:center;
+}
+.comic-panel svg{width:56px;height:56px;color:var(--comic);opacity:.7;}
+.comic-panel:nth-child(2){border-color:var(--comic);}
+.comic-tape{position:absolute;top:-8px;left:20px;width:36px;height:14px;background:rgba(238,240,242,.08);transform:rotate(-4deg);}
+@media(max-width:780px){.comic-showcase{grid-template-columns:1fr 1fr;}}
+ 
+/* ================= PROJETS / APROPOS / CONTACT ================= */
+#view-projets,#view-apropos,#view-contact{background:linear-gradient(180deg,#08090c,#0a0b0e);}
+.plist{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:40px;}
+.prow{background:var(--bg-1);padding:28px clamp(20px,3vw,36px);display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;transition:background .3s;}
+.prow:hover{background:#101318;}
+.prow-left{display:flex;flex-direction:column;gap:5px;}
+.prow-left h4{font-family:var(--serif);font-size:20px;}
+.prow-left span{font-family:var(--mono);font-size:11px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.05em;}
+.pill{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;border-radius:20px;border:1px solid;}
+.pill-cine{color:var(--cine);border-color:var(--cine-dim);}
+.pill-livre{color:var(--livre);border-color:var(--livre-dim);}
+.pill-comic{color:var(--comic);border-color:var(--comic-dim);}
+ 
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;margin-top:40px;}
+.about-grid p{color:var(--ink-dim);font-size:15.5px;margin-bottom:16px;}
+.about-grid strong{color:var(--ink);font-weight:500;}
+@media(max-width:820px){.about-grid{grid-template-columns:1fr;gap:30px;}}
+.forms-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:40px;}
+.form-item{background:var(--bg-1);padding:22px;text-align:center;}
+.form-item span{font-family:var(--mono);font-size:10px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.06em;}
+.form-item h5{font-family:var(--serif);font-size:16px;margin-top:6px;}
+@media(max-width:700px){.forms-row{grid-template-columns:1fr;}}
+ 
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;margin-top:40px;}
+@media(max-width:820px){.contact-grid{grid-template-columns:1fr;gap:34px;}}
+.contact-cats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:30px;}
+.cat{background:var(--bg-1);padding:14px 16px;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-dim);}
+.contact-info dl{display:flex;flex-direction:column;gap:20px;}
+.contact-info dt{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:5px;}
+.contact-info dd{font-size:14.5px;}
+.contact-info .placeholder{color:var(--ink-faint);font-style:italic;font-size:13px;}
+form{display:flex;flex-direction:column;gap:16px;}
+.field{display:flex;flex-direction:column;gap:7px;}
+.field label{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);}
+.field input,.field select,.field textarea{background:transparent;border:none;border-bottom:1px solid var(--line);color:var(--ink);padding:9px 2px;font-family:var(--sans);font-size:14px;font-weight:300;}
+.field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2368686b'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 4px center;}
+.field select option{background:#0d0e11;}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--cine);}
+form .btn{margin-top:8px;align-self:flex-start;}
+ 
+footer{border-top:1px solid var(--line);padding:36px 0;}
+.footer-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+.footer-row .brand{font-size:15px;}
+.footer-legal{font-family:var(--mono);font-size:10px;color:var(--ink-faint);}
+ 
+/* ================= TRANSITION OVERLAYS ================= */
+#iris-overlay{position:fixed;inset:0;background:#000;z-index:900;pointer-events:none;clip-path:circle(0px at 50% 50%);}
+#iris-overlay.animating{pointer-events:auto;}
+ 
+#book-overlay{position:fixed;inset:0;z-index:900;pointer-events:none;perspective:1800px;display:none;}
+#book-overlay.animating{display:block;pointer-events:auto;}
+.book-flap{position:absolute;inset:0;background:linear-gradient(120deg,#141110,#0d0b0a);transform-origin:left center;transform:rotateY(90deg);backface-visibility:hidden;box-shadow:-20px 0 60px rgba(0,0,0,.5);}
+.book-flap::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.02) 0 1px,transparent 1px 3px);}
+ 
+#comic-overlay{position:fixed;inset:0;z-index:900;background:#000;display:none;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:3px;padding:3px;pointer-events:none;}
+#comic-overlay.animating{display:grid;pointer-events:auto;}
+.co-panel{background:#0d0e11;border:2px solid var(--comic-dim);opacity:0;transform:scale(.4);transition:opacity .28s ease, transform .28s ease;}
+.co-panel.show{opacity:1;transform:scale(1);}
+#comic-overlay.fade-out{transition:opacity .4s ease;opacity:0;}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+ 
+<nav class="topnav">
+  <a href="#home" class="brand">OC</a>
+  <div class="nav-links">
+    <a href="#projets">Projets</a>
+    <a href="#apropos">À propos</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <button class="burger" id="burgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#home">Accueil</a>
+  <a href="#projets">Projets</a>
+  <a href="#apropos">À propos</a>
+  <a href="#contact">Contact</a>
+</div>
+ 
+<main id="stage">
+ 
+  <!-- ============ HOME ============ -->
+  <section class="view active" id="view-home">
+    <div class="home-kicker">Hauts-de-France — Studio de création</div>
+    <h1 class="home-title">OC</h1>
+    <p class="home-sub">Nous créons des histoires, et nous leur donnons différentes formes.</p>
+ 
+    <div class="objects-stage">
+      <!-- CAMERA -->
+      <div class="object-cell cell-cine" data-target="camera" data-effect="iris" tabindex="0" role="button" aria-label="Ouvrir le projet Mission Renaissance">
+        <div class="object-plinth">
+          <div class="object-glow"></div>
+          <div class="object-icon">
+            <svg viewBox="0 0 64 46" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="10" width="38" height="28" rx="2"/><path d="M40 18l20-10v30l-20-10z" stroke-linejoin="round"/><circle cx="14" cy="6" r="3" fill="currentColor" stroke="none"/></svg>
+          </div>
+        </div>
+        <div class="object-label">Cinéma</div>
+        <div class="object-title">Mission Renaissance</div>
+        <div class="object-tag">Projet en préproduction</div>
+      </div>
+ 
+      <!-- LIVRE -->
+      <div class="object-cell cell-livre" data-target="livre" data-effect="book" tabindex="0" role="button" aria-label="Ouvrir le projet de roman de science-fiction">
+        <div class="object-plinth">
+          <div class="object-glow"></div>
+          <div class="object-icon">
+            <svg viewBox="0 0 48 56" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 4h18a4 4 0 014 4v44a4 4 0 00-4-4H4z"/><path d="M44 4H26a4 4 0 00-4 4v44a4 4 0 014-4h18z"/><path d="M24 8v44" stroke-dasharray="1 4"/></svg>
+          </div>
+        </div>
+        <div class="object-label">Écriture</div>
+        <div class="object-title">Projet SF</div>
+        <div class="object-tag">En cours d'écriture</div>
+      </div>
+ 
+      <!-- COMIC -->
+      <div class="object-cell cell-comic" data-target="comic" data-effect="comic" tabindex="0" role="button" aria-label="Découvrir le projet graphique à venir">
+        <div class="object-plinth">
+          <div class="object-glow"></div>
+          <div class="object-icon">
+            <svg viewBox="0 0 52 56" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="4" width="34" height="44" rx="1" transform="rotate(-6 21 26)"/><rect x="10" y="8" width="34" height="44" rx="1"/><path d="M18 20h20M18 28h20M18 36h12"/></svg>
+          </div>
+        </div>
+        <div class="object-label">Création graphique</div>
+        <div class="object-title">Comic Book</div>
+        <div class="object-tag">Projet à venir</div>
+      </div>
+    </div>
+ 
+    <div class="home-foot-note">Choisissez un objet pour entrer dans son univers</div>
+  </section>
+ 
+  <!-- ============ CAMERA — MISSION RENAISSANCE ============ -->
+  <section class="view" id="view-camera">
+    <a href="#home" class="back-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 5l-7 7 7 7"/></svg> Retour</a>
+    <div class="cell">
+      <div class="wrap">
+        <div class="cell-hero">
+          <div class="cell-badge"><span class="dot"></span> En développement — Préproduction</div>
+          <h1 class="cell-title">Mission Renaissance</h1>
+          <p class="cell-lede">Une mission interstellaire disparaît au cœur d'une mystérieuse anomalie. Son commandant se réveille dans un monde inconnu — où certaines choses semblent dépasser ce que la science peut expliquer.</p>
+          <div class="cell-meta"><span>Court métrage</span><span>·</span><span>Science-fiction</span><span>·</span><span>12–15 min</span><span>·</span><span>Tournage : janvier ou avril 2027</span></div>
+        </div>
+ 
+        <div class="cell-block">
+          <h3>Avancement</h3>
+          <div class="progress-wrap">
+            <div class="progress-label"><span>Préproduction en cours</span><span id="mrPct">—</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="mrFill"></div></div>
+          </div>
+        </div>
+ 
+        <div class="cell-block two-col">
+          <div>
+            <h3>Synopsis</h3>
+            <p class="mr-synopsis">« Un commandant se réveille seul, loin de sa mission, dans un monde où la physique elle-même semble hésiter. »</p>
+          </div>
+          <div>
+            <h3>Note d'intention</h3>
+            <p>Nous voulons une science-fiction ancrée dans le réel : chaque règle de cet univers est réfléchie pour rester crédible, chaque élément technique du vaisseau pensé avant d'être filmé.</p>
+          </div>
+        </div>
+ 
+        <div class="cell-block">
+          <h3>Univers &amp; recherches</h3>
+          <p style="max-width:680px;">Des recherches en physique et en astronautique nourrissent l'écriture de l'anomalie et ses conséquences sur le commandant. L'objectif : que le mystère du film reste toujours à la limite du plausible, jamais dans la fantaisie gratuite.</p>
+        </div>
+ 
+        <div class="cell-block">
+          <h3>Décor &amp; schémas du cockpit</h3>
+          <div class="schema-grid">
+            <div class="schema-card">
+              <div class="schema-frame"><span>SCHÉMA 01</span></div>
+              <div class="schema-cap"><h5>Poste de commandement</h5><span>Plan technique</span></div>
+            </div>
+            <div class="schema-card">
+              <div class="schema-frame"><span>DÉCOR 01</span></div>
+              <div class="schema-cap"><h5>Cockpit — construction</h5><span>Décor en atelier</span></div>
+            </div>
+            <div class="schema-card">
+              <div class="schema-frame"><span>COULISSES 01</span></div>
+              <div class="schema-cap"><h5>Préparation d'équipe</h5><span>À venir</span></div>
+            </div>
+          </div>
+        </div>
+ 
+        <div class="cell-block">
+          <h3>Lieux de tournage — Hauts-de-France</h3>
+          <div class="schema-grid">
+            <div class="schema-card"><div class="schema-frame"><span>REPÉRAGE</span></div><div class="schema-cap"><h5>Équihen-Plage</h5><span>Littoral — extérieurs</span></div></div>
+            <div class="schema-card"><div class="schema-frame"><span>REPÉRAGE</span></div><div class="schema-cap"><h5>Grandes Plaines du Cambrésis</h5><span>Paysages ouverts</span></div></div>
+            <div class="schema-card"><div class="schema-frame"><span>REPÉRAGE</span></div><div class="schema-cap"><h5>Espaces forestiers</h5><span>Intérieur / extérieur</span></div></div>
+          </div>
+        </div>
+ 
+        <div class="cell-block">
+          <div class="support-box">
+            <div>
+              <h4>Soutenir le film</h4>
+              <p>Cagnotte, mécénat, partenariats techniques — les modalités seront publiées ici dès leur validation.</p>
+            </div>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;">
+              <a href="#" class="btn btn-cine">Cagnotte <span style="opacity:.7;font-size:10px;">(à venir)</span></a>
+              <a href="#contact" class="btn btn-ghost">Contacter l'équipe</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- ============ LIVRE ============ -->
+  <section class="view" id="view-livre">
+    <a href="#home" class="back-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 5l-7 7 7 7"/></svg> Retour</a>
+    <div class="cell">
+      <div class="wrap">
+        <div class="cell-hero">
+          <div class="cell-badge"><span class="dot"></span> Projet en cours d'écriture</div>
+          <h1 class="cell-title">Projet de roman<br>science-fiction</h1>
+          <p class="cell-lede">Un projet littéraire indépendant de Mission Renaissance, porté par la même exigence : construire un univers cohérent avant d'en raconter l'histoire.</p>
+        </div>
+ 
+        <div class="cell-block">
+          <h3>État d'avancement</h3>
+          <div class="stage-tracker">
+            <div class="stage done"><span>Concept</span></div>
+            <div class="stage done"><span>Univers</span></div>
+            <div class="stage"><span>Personnages</span></div>
+            <div class="stage"><span>Premier jet</span></div>
+            <div class="stage"><span>Réécriture</span></div>
+          </div>
+        </div>
+ 
+        <div class="book-spread cell-block">
+          <div class="book-page">
+            <h4>Titre</h4>
+            <p class="placeholder-txt">Titre provisoire — à venir</p>
+            <h4 style="margin-top:30px;">Concept</h4>
+            <p>Un roman de science-fiction encore en construction, pensé comme un terrain d'écriture libre — un espace où explorer, sans les contraintes du format court, les questions que Mission Renaissance ne fait qu'effleurer.</p>
+          </div>
+          <div class="book-page">
+            <h4>Synopsis</h4>
+            <p class="placeholder-txt">À venir — le texte est encore en cours d'écriture.</p>
+            <h4 style="margin-top:30px;">Univers &amp; personnages</h4>
+            <p class="placeholder-txt">Univers en cours de construction. Personnages à venir.</p>
+            <p class="hand-note">— notes de travail —</p>
+          </div>
+        </div>
+ 
+        <div class="cell-block">
+          <h3>Recherches</h3>
+          <p style="max-width:680px;">L'écriture s'appuie sur des lectures et des recherches scientifiques similaires à celles menées pour Mission Renaissance, dans une logique de cohérence entre les deux projets — sans que l'un ne soit une adaptation de l'autre.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- ============ COMIC ============ -->
+  <section class="view" id="view-comic">
+    <a href="#home" class="back-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 5l-7 7 7 7"/></svg> Retour</a>
+    <div class="cell">
+      <div class="wrap">
+        <div class="cell-hero">
+          <div class="cell-badge"><span class="dot"></span> Projet à venir</div>
+          <h1 class="cell-title">Projet graphique</h1>
+          <p class="cell-lede">Un troisième espace de création, encore à naître. Sa forme, son histoire et son univers ne sont pas encore définis — seule l'intention est là : donner une existence dessinée à la même exigence artistique.</p>
+        </div>
+ 
+        <div class="cell-block">
+          <h3>Ce que nous savons déjà</h3>
+          <p style="max-width:680px;">Ce projet prendra la forme d'une bande dessinée mature et artistique, dans la continuité visuelle d'OC. Aucun contenu précis n'est encore fixé — cette page évoluera à mesure que le projet prendra forme.</p>
+        </div>
+ 
+        <div class="cell-block">
+          <h3>Direction pressentie</h3>
+          <div class="comic-showcase">
+            <div class="comic-panel"><div class="comic-tape"></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 4l16 16M20 4L4 20"/></svg></div>
+            <div class="comic-panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="8"/></svg></div>
+            <div class="comic-panel"><div class="comic-tape"></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 18l6-14 4 9 3-6 3 11"/></svg></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- ============ PROJETS ============ -->
+  <section class="view" id="view-projets">
+    <a href="#home" class="back-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 5l-7 7 7 7"/></svg> Retour</a>
+    <div class="cell">
+      <div class="wrap">
+        <div class="cell-hero">
+          <div class="cell-badge" style="background:transparent;border-color:var(--line);color:var(--ink-dim);"><span class="dot" style="background:var(--ink-faint);"></span> Vue d'ensemble</div>
+          <h1 class="cell-title">Nos projets</h1>
+          <p class="cell-lede">Trois formes de création, trois avancements différents.</p>
+        </div>
+        <div class="plist">
+          <a class="prow" href="#camera">
+            <div class="prow-left"><h4>Mission Renaissance</h4><span>Cinéma — court métrage SF</span></div>
+            <span class="pill pill-cine">Préproduction</span>
+          </a>
+          <a class="prow" href="#livre">
+            <div class="prow-left"><h4>Projet de roman SF</h4><span>Écriture — littérature</span></div>
+            <span class="pill pill-livre">En écriture</span>
+          </a>
+          <a class="prow" href="#comic">
+            <div class="prow-left"><h4>Projet graphique</h4><span>Comic book — création graphique</span></div>
+            <span class="pill pill-comic">À venir</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- ============ APROPOS ============ -->
+  <section class="view" id="view-apropos">
+    <a href="#home" class="back-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 5l-7 7 7 7"/></svg> Retour</a>
+    <div class="cell">
+      <div class="wrap">
+        <div class="cell-hero">
+          <div class="cell-badge" style="background:transparent;border-color:var(--line);color:var(--ink-dim);"><span class="dot" style="background:var(--ink-faint);"></span> À propos</div>
+          <h1 class="cell-title">OC</h1>
+        </div>
+        <div class="about-grid">
+          <div>
+            <p><strong>OC</strong> est une jeune structure de création basée dans les Hauts-de-France, née de la volonté de donner une forme concrète à des histoires — quelle que soit la forme que ces histoires réclament.</p>
+            <p>Nous ne nous enfermons pas dans un seul médium. Le cinéma, l'écriture et l'image sont pour nous trois langages différents d'une même envie : raconter.</p>
+          </div>
+          <div>
+            <p><strong>Cinéma → Écriture → Création graphique.</strong> Chaque projet reste indépendant, porté par sa propre exigence, mais tous partagent la même identité et la même ambition.</p>
+            <p>Notre ancrage dans les Hauts-de-France n'est pas accessoire : c'est un territoire que nous voulons filmer, écrire et dessiner.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- ============ CONTACT ============ -->
+  <section class="view" id="view-contact">
+    <a href="#home" class="back-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 5l-7 7 7 7"/></svg> Retour</a>
+    <div class="cell">
+      <div class="wrap">
+        <div class="cell-hero">
+          <div class="cell-badge" style="background:transparent;border-color:var(--line);color:var(--ink-dim);"><span class="dot" style="background:var(--ink-faint);"></span> Contact</div>
+          <h1 class="cell-title">Parlons de votre projet.</h1>
+        </div>
+ 
+        <div class="contact-grid">
+          <div>
+            <div class="contact-cats">
+              <div class="cat">Proposer un projet</div>
+              <div class="cat">Partenariat</div>
+              <div class="cat">Mécénat</div>
+              <div class="cat">Collaboration artistique</div>
+              <div class="cat">Presse</div>
+            </div>
+            <div class="contact-info">
+              <dl>
+                <div><dt>E-mail</dt><dd class="placeholder">adresse e-mail à renseigner</dd></div>
+                <div><dt>Localisation</dt><dd>Hauts-de-France, France</dd></div>
+                <div><dt>Réseaux sociaux</dt><dd class="placeholder">liens à renseigner</dd></div>
+              </dl>
+            </div>
+          </div>
+          <form id="contactForm">
+            <div class="field"><label for="cName">Nom</label><input id="cName" type="text" required></div>
+            <div class="field"><label for="cEmail">E-mail</label><input id="cEmail" type="email" required></div>
+            <div class="field"><label for="cSubject">Objet</label>
+              <select id="cSubject">
+                <option>Proposer un projet</option><option>Partenariat</option><option>Mécénat</option>
+                <option>Collaboration artistique</option><option>Presse</option><option>Autre</option>
+              </select>
+            </div>
+            <div class="field"><label for="cMsg">Message</label><textarea id="cMsg" rows="4" required></textarea></div>
+            <button type="submit" class="btn btn-cine">Envoyer le message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+</main>
+ 
+<footer>
+  <div class="wrap footer-row">
+    <div class="brand">OC</div>
+    <div class="footer-legal">© 2026 OC — Hauts-de-France. Mentions légales à venir.</div>
+  </div>
+</footer>
+ 
+<!-- transition overlays -->
+<div id="iris-overlay"></div>
+<div id="book-overlay"><div class="book-flap"></div></div>
+<div id="comic-overlay"></div>
+ 
+<script>
+/* ---------- mobile menu ---------- */
+const burger = document.getElementById('burgerBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+burger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
+ 
+/* ---------- view routing ---------- */
+const views = document.querySelectorAll('.view');
+function showView(id){
+  views.forEach(v => v.classList.toggle('active', v.id === 'view-' + id));
+  window.scrollTo({top:0,behavior:'auto'});
+  if(id === 'camera'){
+    requestAnimationFrame(() => {
+      document.getElementById('mrFill').classList.add('go');
+      document.getElementById('mrPct').textContent = '42%';
+    });
+  }
+}
+ 
+function currentRoute(){ return (location.hash || '#home').replace('#','') || 'home'; }
+ 
+/* ---------- transitions ---------- */
+function runIrisTransition(targetId, originX, originY){
+  const overlay = document.getElementById('iris-overlay');
+  const maxR = Math.hypot(Math.max(originX, window.innerWidth-originX), Math.max(originY, window.innerHeight-originY)) + 40;
+  overlay.classList.add('animating');
+  overlay.style.transition = 'clip-path .55s cubic-bezier(.6,0,.2,1)';
+  overlay.style.clipPath = `circle(${maxR}px at ${originX}px ${originY}px)`;
+  setTimeout(() => {
+    showView(targetId);
+    overlay.style.transition = 'none';
+    overlay.style.clipPath = `circle(${maxR}px at ${originX}px ${originY}px)`;
+    requestAnimationFrame(() => {
+      overlay.style.transition = 'clip-path .55s cubic-bezier(.6,0,.2,1) .05s';
+      overlay.style.clipPath = `circle(0px at ${originX}px ${originY}px)`;
+    });
+    setTimeout(() => overlay.classList.remove('animating'), 650);
+  }, 560);
+}
+ 
+function runBookTransition(targetId){
+  const overlay = document.getElementById('book-overlay');
+  const flap = overlay.querySelector('.book-flap');
+  overlay.classList.add('animating');
+  flap.style.transition = 'none';
+  flap.style.transform = 'rotateY(90deg)';
+  requestAnimationFrame(() => {
+    flap.style.transition = 'transform .5s cubic-bezier(.4,0,.2,1)';
+    flap.style.transform = 'rotateY(0deg)';
+  });
+  setTimeout(() => {
+    showView(targetId);
+    flap.style.transition = 'transform .5s cubic-bezier(.4,0,.2,1)';
+    flap.style.transformOrigin = 'right center';
+    flap.style.transform = 'rotateY(-90deg)';
+    setTimeout(() => {
+      overlay.classList.remove('animating');
+      flap.style.transformOrigin = 'left center';
+      flap.style.transform = 'rotateY(90deg)';
+    }, 520);
+  }, 520);
+}
+ 
+function runComicTransition(targetId){
+  const overlay = document.getElementById('comic-overlay');
+  overlay.innerHTML = '';
+  overlay.classList.remove('fade-out');
+  overlay.classList.add('animating');
+  const panels = [];
+  for(let i=0;i<6;i++){
+    const p = document.createElement('div');
+    p.className = 'co-panel';
+    overlay.appendChild(p);
+    panels.push(p);
+  }
+  panels.forEach((p, i) => {
+    setTimeout(() => p.classList.add('show'), i * 90);
+  });
+  setTimeout(() => {
+    showView(targetId);
+    overlay.classList.add('fade-out');
+    setTimeout(() => {
+      overlay.classList.remove('animating');
+      overlay.classList.remove('fade-out');
+      overlay.innerHTML = '';
+    }, 420);
+  }, panels.length * 90 + 300);
+}
+ 
+/* ---------- object click handlers ---------- */
+document.querySelectorAll('.object-cell').forEach(cell => {
+  const activate = (evt) => {
+    const target = cell.dataset.target;
+    const effect = cell.dataset.effect;
+    const rect = cell.querySelector('.object-icon').getBoundingClientRect();
+    const ox = rect.left + rect.width/2;
+    const oy = rect.top + rect.height/2;
+    location.hash = target; // update route without re-triggering full jump logic (hashchange listener guards below)
+    if(effect === 'iris') runIrisTransition(target, ox, oy);
+    else if(effect === 'book') runBookTransition(target);
+    else if(effect === 'comic') runComicTransition(target);
+  };
+  cell.addEventListener('click', activate);
+  cell.addEventListener('keydown', (e) => { if(e.key==='Enter' || e.key===' '){ e.preventDefault(); activate(e);} });
+});
+ 
+/* ---------- plain nav links (no special transition) ---------- */
+let suppressNextHashRoute = false;
+document.querySelectorAll('.object-cell').forEach(() => {}); // handled above
+ 
+window.addEventListener('hashchange', () => {
+  const route = currentRoute();
+  // if this route corresponds to a view already made active by a transition, skip re-render
+  const activeId = document.querySelector('.view.active').id.replace('view-','');
+  if(activeId !== route){
+    showView(route);
+  }
+});
+ 
+/* initial route on load */
+showView(currentRoute());
+ 
+/* ---------- contact form ---------- */
+document.getElementById('contactForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const btn = this.querySelector('button[type="submit"]');
+  const original = btn.textContent;
+  btn.textContent = 'Message prêt à être envoyé';
+  setTimeout(() => { btn.textContent = original; }, 2400);
+});
+</script>
+</body>
+</html>
