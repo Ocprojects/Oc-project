@@ -16,6 +16,7 @@
   --cine:#6fa3c4; --cine-dim:#3f5c6e;
   --livre:#c9a15a; --livre-dim:#6e5834;
   --comic:#c0453a; --comic-dim:#6e2e28;
+  --youtube:#e0473c; --youtube-dim:#7a2b23;
   --serif:'Playfair Display',Georgia,serif;
   --sans:'Inter',-apple-system,sans-serif;
   --mono:'IBM Plex Mono',monospace;
@@ -87,6 +88,7 @@ img{max-width:100%;display:block;}
 .cell-cine{--obj-color:var(--cine);--glow:var(--cine);}
 .cell-livre{--obj-color:var(--livre);--glow:var(--livre);}
 .cell-comic{--obj-color:var(--comic);--glow:var(--comic);}
+.cell-youtube{--obj-color:var(--youtube);--glow:var(--youtube);}
 .object-cell:active .object-icon{transform:scale(.96);}
  
 .home-foot-note{margin-top:70px;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--ink-faint);text-transform:uppercase;opacity:0;animation:fadeUp 1s ease .9s forwards;}
@@ -231,6 +233,8 @@ footer{border-top:1px solid var(--line);padding:36px 0;}
 .co-panel{background:#0d0e11;border:2px solid var(--comic-dim);opacity:0;transform:scale(.4);transition:opacity .28s ease, transform .28s ease;}
 .co-panel.show{opacity:1;transform:scale(1);}
 #comic-overlay.fade-out{transition:opacity .4s ease;opacity:0;}
+#youtube-overlay{position:fixed;inset:0;z-index:900;background:#fff;opacity:0;pointer-events:none;transition:opacity .15s ease;}
+#youtube-overlay.flash{opacity:1;}
 </style>
 </head>
 <body>
@@ -299,6 +303,17 @@ footer{border-top:1px solid var(--line);padding:36px 0;}
         <div class="object-title">Comic Book</div>
         <div class="object-tag">Projet à venir</div>
       </div>
+    </div>
+    <div class="object-cell cell-youtube" data-effect="youtube" tabindex="0" role="button" aria-label="Ouvrir la chaîne YouTube">
+      <div class="object-plinth">
+        <div class="object-glow"></div>
+        <div class="object-icon">
+          <svg viewBox="0 0 64 46" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="2" width="60" height="42" rx="10"/><path d="M26 15l16 8-16 8z" fill="currentColor" stroke="none"/></svg>
+        </div>
+      </div>
+      <div class="object-label">Vidéo</div>
+      <div class="object-title">YouTube</div>
+      <div class="object-tag">Notre chaîne</div>
     </div>
  
     <div class="home-foot-note">Choisissez un objet pour entrer dans son univers</div>
@@ -578,6 +593,7 @@ beaucoup plus tard, le premier prototype du projet était d'en faire un manga/co
 <div id="iris-overlay"></div>
 <div id="book-overlay"><div class="book-flap"></div></div>
 <div id="comic-overlay"></div>
+div id="youtube-overlay"></div>
  
 <script>
 /* ---------- mobile menu ---------- */
@@ -668,7 +684,14 @@ function runComicTransition(targetId){
     }, 420);
   }, panels.length * 90 + 300);
 }
- 
+function runYoutubeTransition(){
+const overlay = document.getElementById('youtube-overlay');
+overlay.classList.add('flash');
+setTimeout(() => {
+overlay.classList.remove('flash');
+window.open('https://www.youtube.com/@ShayzorYT', '_blank');
+}, 180);
+}
 /* ---------- object click handlers ---------- */
 document.querySelectorAll('.object-cell').forEach(cell => {
   const activate = (evt) => {
@@ -677,10 +700,11 @@ document.querySelectorAll('.object-cell').forEach(cell => {
     const rect = cell.querySelector('.object-icon').getBoundingClientRect();
     const ox = rect.left + rect.width/2;
     const oy = rect.top + rect.height/2;
-    location.hash = target; // update route without re-triggering full jump logic (hashchange listener guards below)
+    if(target) location.hash = target;
     if(effect === 'iris') runIrisTransition(target, ox, oy);
     else if(effect === 'book') runBookTransition(target);
     else if(effect === 'comic') runComicTransition(target);
+    else if(effect === 'youtube') runYoutubeTransition();
   };
   cell.addEventListener('click', activate);
   cell.addEventListener('keydown', (e) => { if(e.key==='Enter' || e.key===' '){ e.preventDefault(); activate(e);} });
